@@ -8,141 +8,128 @@
 <meta name="apple-mobile-web-app-title" content="ピアノ時間割">
 <title>ピアノ時間割</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#fff;--bg2:#f5f5f4;--bg3:#ebebea;
+  --text:#1a1a1a;--text2:#777770;--text3:#bbb9b4;
+  --bd:rgba(0,0,0,0.13);--bd2:rgba(0,0,0,0.22);
+  --home-bg:#B5D4F4;--home-bd:#378ADD;--home-tx:#0C447C;
+  --visit-bg:#C0DD97;--visit-bd:#639922;--visit-tx:#27500A;
+  --travel-bg:#FAC775;--travel-bd:#BA7517;--travel-tx:#633806;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+    --text:#f0f0ee;--text2:#aaa9a4;--text3:#555552;
+    --bd:rgba(255,255,255,0.1);--bd2:rgba(255,255,255,0.2);
+    --home-bg:#0C447C;--home-bd:#378ADD;--home-tx:#B5D4F4;
+    --visit-bg:#27500A;--visit-bd:#639922;--visit-tx:#C0DD97;
+    --travel-bg:#633806;--travel-bd:#BA7517;--travel-tx:#FAC775;
+  }
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background:var(--bg);color:var(--text);}
 
-  :root {
-    --bg: #ffffff;
-    --bg2: #f5f5f4;
-    --bg3: #efefed;
-    --text: #1a1a1a;
-    --text2: #666660;
-    --text3: #aaa9a4;
-    --border: rgba(0,0,0,0.12);
-    --border2: rgba(0,0,0,0.22);
-    --radius: 12px;
-    --home-bg: #B5D4F4; --home-bd: #378ADD; --home-tx: #0C447C;
-    --visit-bg: #C0DD97; --visit-bd: #639922; --visit-tx: #27500A;
-    --travel-bg: #FAC775; --travel-bd: #BA7517; --travel-tx: #633806;
-  }
+.hdr{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 10px;border-bottom:0.5px solid var(--bd2);
+  background:var(--bg);position:sticky;top:0;z-index:50;
+}
+.hdr-title{font-size:13px;font-weight:600;color:var(--text);}
+.legend{display:flex;gap:6px;align-items:center;margin-left:auto;}
+.leg{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--text2);}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1c1c1e; --bg2: #2c2c2e; --bg3: #3a3a3c;
-      --text: #f0f0ee; --text2: #aaa9a4; --text3: #666660;
-      --border: rgba(255,255,255,0.12); --border2: rgba(255,255,255,0.22);
-      --home-bg: #0C447C; --home-bd: #378ADD; --home-tx: #B5D4F4;
-      --visit-bg: #27500A; --visit-bd: #639922; --visit-tx: #C0DD97;
-      --travel-bg: #633806; --travel-bd: #BA7517; --travel-tx: #FAC775;
-    }
-  }
+.grid-wrap{overflow:auto;-webkit-overflow-scrolling:touch;height:calc(100dvh - 42px);}
+table{border-collapse:collapse;table-layout:fixed;}
 
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif; background: var(--bg); color: var(--text); }
+.th-corner{
+  position:sticky;top:0;left:0;z-index:30;
+  background:var(--bg3);width:38px;min-width:38px;
+  font-size:9px;color:var(--text3);text-align:center;
+  padding:4px 1px;border:0.5px solid var(--bd);
+}
+.th-day{
+  position:sticky;top:0;z-index:20;
+  background:var(--bg3);width:72px;min-width:72px;
+  font-size:11px;font-weight:600;text-align:center;
+  padding:6px 2px;border:0.5px solid var(--bd);color:var(--text);
+}
+.tc-time{
+  position:sticky;left:0;z-index:10;
+  background:var(--bg);width:38px;min-width:38px;
+  font-size:9px;color:var(--text2);text-align:center;
+  padding:0 1px;border:0.5px solid var(--bd);white-space:nowrap;
+}
+.cell{
+  width:72px;min-width:72px;height:30px;
+  border:0.5px solid var(--bd);
+  cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0.05);
+  vertical-align:top;padding:0;position:relative;
+}
+.cell:active{opacity:0.7;}
+.cell-inner{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;
+  padding:1px 4px;text-align:center;line-height:1.1;
+  border-left:2px solid transparent;
+}
+.cell-empty{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text3);font-size:14px;font-weight:300;
+}
+.hour-border{border-top:0.5px solid var(--bd2) !important;}
 
-  .hdr {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 14px; border-bottom: 0.5px solid var(--border2);
-    background: var(--bg); position: sticky; top: 0; z-index: 50;
-  }
-  .hdr-title { font-size: 15px; font-weight: 600; color: var(--text); }
-  .legend { display: flex; gap: 8px; align-items: center; margin-left: auto; }
-  .leg { display: flex; align-items: center; gap: 3px; font-size: 11px; color: var(--text2); }
-  .leg-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.4);
+  display:flex;align-items:flex-end;z-index:200;
+}
+.sheet{
+  background:var(--bg);border-radius:18px 18px 0 0;
+  padding:16px 14px 36px;width:100%;
+  animation:up 0.2s ease;
+}
+@keyframes up{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sheet-bar{width:32px;height:4px;background:var(--bd2);border-radius:2px;margin:0 auto 14px;}
+.sheet-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:12px;}
+.sheet label{font-size:12px;color:var(--text2);display:block;margin-bottom:5px;}
 
-  .grid-wrap { overflow: auto; -webkit-overflow-scrolling: touch; height: calc(100dvh - 50px); }
-  table { border-collapse: collapse; table-layout: fixed; }
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px;}
+.type-btn{
+  height:52px;border-radius:10px;font-size:11px;font-weight:600;
+  cursor:pointer;border:2px solid var(--bd);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  background:var(--bg2);color:var(--text2);
+}
+.type-btn .icon{font-size:16px;}
+.type-btn.sel-home {background:var(--home-bg);border-color:var(--home-bd);color:var(--home-tx);}
+.type-btn.sel-visit{background:var(--visit-bg);border-color:var(--visit-bd);color:var(--visit-tx);}
+.type-btn.sel-travel{background:var(--travel-bg);border-color:var(--travel-bd);color:var(--travel-tx);}
 
-  .th-corner {
-    position: sticky; top: 0; left: 0; z-index: 30;
-    background: var(--bg3); width: 50px; min-width: 50px;
-    border: 0.5px solid var(--border); font-size: 10px; color: var(--text3); text-align: center; padding: 6px 2px;
-  }
-  .th-day {
-    position: sticky; top: 0; z-index: 20;
-    background: var(--bg3); width: 108px; min-width: 108px;
-    font-size: 13px; font-weight: 600; text-align: center;
-    padding: 8px 2px; border: 0.5px solid var(--border); color: var(--text);
-  }
-  .tc-time {
-    position: sticky; left: 0; z-index: 10;
-    background: var(--bg); width: 50px; min-width: 50px;
-    font-size: 11px; color: var(--text2); text-align: center;
-    padding: 0 2px; border: 0.5px solid var(--border); white-space: nowrap;
-  }
-  .cell {
-    width: 108px; min-width: 108px; height: 46px;
-    border: 0.5px solid var(--border);
-    cursor: pointer; -webkit-tap-highlight-color: rgba(0,0,0,0.06);
-    vertical-align: top; padding: 0; position: relative;
-  }
-  .cell:active { opacity: 0.75; }
-  .cell-inner {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 600;
-    padding: 2px 6px; text-align: center; line-height: 1.2;
-    border-left: 3px solid transparent;
-  }
-  .cell-empty {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text3); font-size: 20px; font-weight: 300;
-  }
+#name-row input{
+  width:100%;height:44px;font-size:16px;
+  background:var(--bg2);border:0.5px solid var(--bd2);
+  border-radius:10px;padding:0 12px;color:var(--text);
+  outline:none;margin-bottom:14px;
+}
+#name-row input:focus{border-color:var(--home-bd);}
 
-  .overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
-    display: flex; align-items: flex-end; z-index: 200;
-  }
-  .sheet {
-    background: var(--bg); border-radius: 20px 20px 0 0;
-    padding: 20px 16px 40px; width: 100%;
-    animation: up 0.22s ease;
-  }
-  @keyframes up { from { transform: translateY(70px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-  .sheet-bar { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 16px; }
-  .sheet-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 14px; }
-  .sheet label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 6px; }
-
-  .type-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px; }
-  .type-btn {
-    height: 58px; border-radius: 10px; font-size: 12px; font-weight: 600;
-    cursor: pointer; border: 2px solid var(--border);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-    background: var(--bg2); color: var(--text2); transition: all 0.12s;
-  }
-  .type-btn .icon { font-size: 18px; }
-  .type-btn.sel-home  { background: var(--home-bg);  border-color: var(--home-bd);  color: var(--home-tx); }
-  .type-btn.sel-visit { background: var(--visit-bg); border-color: var(--visit-bd); color: var(--visit-tx); }
-  .type-btn.sel-travel{ background: var(--travel-bg);border-color: var(--travel-bd);color: var(--travel-tx);}
-
-  #name-row input {
-    width: 100%; height: 46px; font-size: 16px;
-    background: var(--bg2); border: 0.5px solid var(--border2);
-    border-radius: 10px; padding: 0 12px; color: var(--text);
-    outline: none; margin-bottom: 16px;
-  }
-  #name-row input:focus { border-color: var(--home-bd); }
-
-  .sheet-btns { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
-  .btn {
-    height: 48px; border-radius: 10px; font-size: 15px; font-weight: 600;
-    cursor: pointer; border: none; transition: opacity 0.1s;
-  }
-  .btn:active { opacity: 0.7; }
-  .btn-del { background: #FCEBEB; color: #A32D2D; }
-  .btn-save { background: #378ADD; color: #fff; }
-
-  @media (prefers-color-scheme: dark) {
-    .btn-del { background: #501313; color: #F09595; }
-    .btn-save { background: #185FA5; color: #E6F1FB; }
-    #name-row input { background: var(--bg2); }
-  }
+.sheet-btns{display:grid;grid-template-columns:1fr 2fr;gap:8px;}
+.btn{height:46px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;}
+.btn:active{opacity:0.7;}
+.btn-del{background:#FCEBEB;color:#A32D2D;}
+.btn-save{background:#378ADD;color:#fff;}
+@media(prefers-color-scheme:dark){
+  .btn-del{background:#501313;color:#F09595;}
+  .btn-save{background:#185FA5;color:#E6F1FB;}
+}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <span style="font-size:20px;">🎹</span>
+  <span style="font-size:16px;">🎹</span>
   <span class="hdr-title">ピアノ時間割</span>
   <div class="legend">
     <div class="leg"><div class="leg-dot" style="background:var(--home-bg);border:1px solid var(--home-bd);"></div>自宅</div>
@@ -167,7 +154,7 @@
     </div>
     <div id="name-row">
       <label>生徒名</label>
-      <input type="text" id="inp-name" placeholder="例：田中さん" autocomplete="off" />
+      <input type="text" id="inp-name" placeholder="例：田中さん" autocomplete="off"/>
     </div>
     <div class="sheet-btns">
       <button class="btn btn-del"  onclick="deleteEntry()">削除</button>
@@ -177,74 +164,65 @@
 </div>
 
 <script>
-const DAYS = ['月','火','水','木','金','土'];
-const COLORS = {
-  home:   { bg:'var(--home-bg)',   bd:'var(--home-bd)',   tx:'var(--home-tx)'  },
-  visit:  { bg:'var(--visit-bg)',  bd:'var(--visit-bd)',  tx:'var(--visit-tx)' },
-  travel: { bg:'var(--travel-bg)', bd:'var(--travel-bd)', tx:'var(--travel-tx)'},
+const DAYS=['月','火','水','木','金','土'];
+const COLORS={
+  home:  {bg:'var(--home-bg)', bd:'var(--home-bd)', tx:'var(--home-tx)'},
+  visit: {bg:'var(--visit-bg)',bd:'var(--visit-bd)',tx:'var(--visit-tx)'},
+  travel:{bg:'var(--travel-bg)',bd:'var(--travel-bd)',tx:'var(--travel-tx)'},
 };
-const SK = 'piano_schedule_v2';
-let data = {}, edit = null, curType = 'home';
+const SK='piano_schedule_v2';
+let data={},edit=null,curType='home';
 
-function slots() {
-  const s = [];
-  for (let h = 9; h <= 20; h++) { s.push(h + ':00'); s.push(h + ':30'); }
-  s.push('21:00');
-  return s;
+function slots(){
+  const s=[];
+  for(let h=9;h<=20;h++){s.push(h+':00');s.push(h+':30');}
+  s.push('21:00');return s;
 }
+function load(){try{const r=localStorage.getItem(SK);if(r)data=JSON.parse(r);}catch(e){}}
+function save(){try{localStorage.setItem(SK,JSON.stringify(data));}catch(e){}}
 
-function load() {
-  try { const r = localStorage.getItem(SK); if (r) data = JSON.parse(r); } catch(e) {}
-}
-
-function save() {
-  try { localStorage.setItem(SK, JSON.stringify(data)); } catch(e) {}
-}
-
-function build() {
-  const sl = slots();
-  const t = document.getElementById('tbl');
-  t.innerHTML = '';
-  const thead = document.createElement('thead');
-  const hr = document.createElement('tr');
-  const tc = document.createElement('th');
-  tc.className = 'th-corner'; tc.textContent = '時間'; hr.appendChild(tc);
-  DAYS.forEach(d => {
-    const th = document.createElement('th');
-    th.className = 'th-day'; th.textContent = d + '曜'; hr.appendChild(th);
+function build(){
+  const sl=slots();
+  const t=document.getElementById('tbl');
+  t.innerHTML='';
+  const thead=document.createElement('thead');
+  const hr=document.createElement('tr');
+  const tc=document.createElement('th');
+  tc.className='th-corner';tc.textContent='時間';hr.appendChild(tc);
+  DAYS.forEach(d=>{
+    const th=document.createElement('th');
+    th.className='th-day';th.textContent=d+'曜';hr.appendChild(th);
   });
-  thead.appendChild(hr); t.appendChild(thead);
+  thead.appendChild(hr);t.appendChild(thead);
 
-  const tbody = document.createElement('tbody');
-  sl.forEach(s => {
-    const tr = document.createElement('tr');
-    const td0 = document.createElement('td');
-    td0.className = 'tc-time';
-    const isHour = s.endsWith(':00');
-    td0.textContent = isHour ? s : '';
-    td0.style.borderTop = isHour ? '0.5px solid var(--border2)' : '0.5px solid var(--border)';
+  const tbody=document.createElement('tbody');
+  sl.forEach(s=>{
+    const tr=document.createElement('tr');
+    const td0=document.createElement('td');
+    td0.className='tc-time';
+    const isHour=s.endsWith(':00');
+    td0.textContent=isHour?s:'';
+    if(isHour)td0.classList.add('hour-border');
     tr.appendChild(td0);
 
-    DAYS.forEach(d => {
-      const k = d + '_' + s;
-      const entry = data[k];
-      const td = document.createElement('td');
-      td.className = 'cell';
-      if (isHour) td.style.borderTop = '0.5px solid var(--border2)';
-      td.addEventListener('click', () => openSheet(d, s));
-
-      if (entry) {
-        const c = COLORS[entry.type];
-        td.style.background = c.bg;
-        const div = document.createElement('div');
-        div.className = 'cell-inner';
-        div.style.color = c.tx;
-        div.style.borderLeftColor = c.bd;
-        div.textContent = entry.type === 'travel' ? '移動' : (entry.name || '（未入力）');
+    DAYS.forEach(d=>{
+      const k=d+'_'+s;const entry=data[k];
+      const td=document.createElement('td');
+      td.className='cell';
+      if(isHour)td.classList.add('hour-border');
+      td.addEventListener('click',()=>openSheet(d,s));
+      if(entry){
+        const c=COLORS[entry.type];
+        td.style.background=c.bg;
+        const div=document.createElement('div');
+        div.className='cell-inner';
+        div.style.color=c.tx;
+        div.style.borderLeftColor=c.bd;
+        div.textContent=entry.type==='travel'?'移動':(entry.name||'未入力');
         td.appendChild(div);
       } else {
-        const div = document.createElement('div');
-        div.className = 'cell-empty'; div.textContent = '+';
+        const div=document.createElement('div');
+        div.className='cell-empty';div.textContent='+';
         td.appendChild(div);
       }
       tr.appendChild(td);
@@ -254,55 +232,39 @@ function build() {
   t.appendChild(tbody);
 }
 
-function openSheet(day, slot) {
-  edit = { day, slot };
-  const k = day + '_' + slot;
-  const e = data[k] || {};
-  curType = e.type || 'home';
-  document.getElementById('sheet-ttl').textContent = day + '曜 ' + slot;
-  document.getElementById('inp-name').value = e.name || '';
+function openSheet(day,slot){
+  edit={day,slot};
+  const k=day+'_'+slot;const e=data[k]||{};
+  curType=e.type||'home';
+  document.getElementById('sheet-ttl').textContent=day+'曜 '+slot;
+  document.getElementById('inp-name').value=e.name||'';
   updateTypeUI();
-  document.getElementById('overlay').style.display = 'flex';
-  if (curType !== 'travel') setTimeout(() => document.getElementById('inp-name').focus(), 150);
+  document.getElementById('overlay').style.display='flex';
+  if(curType!=='travel')setTimeout(()=>document.getElementById('inp-name').focus(),150);
 }
-
-function selType(t) { curType = t; updateTypeUI(); }
-
-function updateTypeUI() {
-  ['home','visit','travel'].forEach(t => {
-    const b = document.getElementById('btn-' + t);
-    b.className = 'type-btn' + (curType === t ? ' sel-' + t : '');
+function selType(t){curType=t;updateTypeUI();}
+function updateTypeUI(){
+  ['home','visit','travel'].forEach(t=>{
+    document.getElementById('btn-'+t).className='type-btn'+(curType===t?' sel-'+t:'');
   });
-  document.getElementById('name-row').style.display = curType === 'travel' ? 'none' : 'block';
+  document.getElementById('name-row').style.display=curType==='travel'?'none':'block';
 }
-
-function saveEntry() {
-  const k = edit.day + '_' + edit.slot;
-  data[k] = { type: curType, name: document.getElementById('inp-name').value.trim() };
-  save(); build(); closeSheet();
+function saveEntry(){
+  const k=edit.day+'_'+edit.slot;
+  data[k]={type:curType,name:document.getElementById('inp-name').value.trim()};
+  save();build();closeSheet();
 }
-
-function deleteEntry() {
-  const k = edit.day + '_' + edit.slot;
-  delete data[k]; save(); build(); closeSheet();
+function deleteEntry(){
+  const k=edit.day+'_'+edit.slot;
+  delete data[k];save();build();closeSheet();
 }
+function closeSheet(){document.getElementById('overlay').style.display='none';edit=null;}
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeSheet();});
+let startY=0;
+document.getElementById('sheet').addEventListener('touchstart',e=>{startY=e.touches[0].clientY;},{passive:true});
+document.getElementById('sheet').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-startY>60)closeSheet();});
 
-function closeSheet() {
-  document.getElementById('overlay').style.display = 'none';
-  edit = null;
-}
-
-document.getElementById('overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeSheet();
-});
-
-let startY = 0;
-document.getElementById('sheet').addEventListener('touchstart', e => { startY = e.touches[0].clientY; });
-document.getElementById('sheet').addEventListener('touchend', e => {
-  if (e.changedTouches[0].clientY - startY > 60) closeSheet();
-});
-
-load(); build();
+load();build();
 </script>
 </body>
 </html>
