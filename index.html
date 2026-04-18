@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="ピアノ時間割">
@@ -27,96 +27,47 @@
     --travel-bg:#633806;--travel-bd:#BA7517;--travel-tx:#FAC775;
   }
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background:var(--bg);color:var(--text);}
+html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background:var(--bg);color:var(--text);}
 
-.hdr{
-  display:flex;align-items:center;gap:6px;
-  padding:7px 10px;border-bottom:0.5px solid var(--bd2);
-  background:var(--bg);position:sticky;top:0;z-index:50;
-}
+.hdr{display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:0.5px solid var(--bd2);background:var(--bg);height:40px;}
 .hdr-title{font-size:13px;font-weight:600;color:var(--text);}
 .legend{display:flex;gap:6px;align-items:center;margin-left:auto;}
 .leg{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--text2);}
 .leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
 
-.grid-wrap{overflow:auto;-webkit-overflow-scrolling:touch;height:calc(100dvh - 40px);}
+.grid-wrap{position:absolute;top:40px;left:0;right:0;bottom:0;overflow:auto;-webkit-overflow-scrolling:touch;}
 table{border-collapse:collapse;table-layout:fixed;}
 
-.th-corner{
-  position:sticky;top:0;left:0;z-index:30;
-  background:var(--bg3);width:36px;min-width:36px;
-  font-size:9px;color:var(--text3);text-align:center;
-  padding:3px 1px;border:0.5px solid var(--bd);
-}
-.th-day{
-  position:sticky;top:0;z-index:20;
-  background:var(--bg3);width:56px;min-width:56px;
-  font-size:11px;font-weight:600;text-align:center;
-  padding:5px 2px;border:0.5px solid var(--bd);color:var(--text);
-}
-.tc-time{
-  position:sticky;left:0;z-index:10;
-  background:var(--bg);width:36px;min-width:36px;
-  font-size:10px;color:var(--text2);text-align:center;
-  padding:0 1px;border:0.5px solid var(--bd);white-space:nowrap;
-  height:16px;
-}
-.cell{
-  width:56px;min-width:56px;height:16px;
-  border:0.5px solid var(--bd);
-  cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0.05);
-  vertical-align:middle;padding:0;position:relative;
-}
+.th-corner{position:sticky;top:0;left:0;z-index:30;background:var(--bg3);width:36px;min-width:36px;font-size:9px;color:var(--text3);text-align:center;padding:3px 1px;border:0.5px solid var(--bd);}
+.th-day{position:sticky;top:0;z-index:20;background:var(--bg3);width:56px;min-width:56px;font-size:11px;font-weight:600;text-align:center;padding:5px 2px;border:0.5px solid var(--bd);color:var(--text);}
+.tc-time{position:sticky;left:0;z-index:10;background:var(--bg);width:36px;min-width:36px;font-size:10px;color:var(--text2);text-align:center;padding:0 1px;border:0.5px solid var(--bd);white-space:nowrap;height:16px;}
+.cell{width:56px;min-width:56px;height:16px;border:0.5px solid var(--bd);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0.05);vertical-align:middle;padding:0;}
 .cell:active{opacity:0.65;}
-.cell-inner{
-  width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:600;
-  padding:0 3px;text-align:center;line-height:1;
-  border-left:2px solid transparent;
-  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
-}
-.cell-empty{
-  width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--text3);font-size:10px;
-}
-.hour-row td{border-top:0.5px solid var(--bd2) !important;}
+.cell-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;padding:0 3px;text-align:center;line-height:1;border-left:2px solid transparent;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.cell-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:10px;}
 
-.overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,0.4);
-  display:flex;align-items:flex-end;z-index:200;
-}
-.sheet{
-  background:var(--bg);border-radius:18px 18px 0 0;
-  padding:14px 14px 36px;width:100%;
-  animation:up 0.2s ease;
-}
+/* 1時間ごと：やや太め */
+.hour-row td{border-top:1.5px solid rgba(0,0,0,0.28) !important;}
+@media(prefers-color-scheme:dark){.hour-row td{border-top:1.5px solid rgba(255,255,255,0.28) !important;}}
+
+/* 13:00・17:00：さらに太く濃く */
+.break-row td{border-top:2.5px solid rgba(0,0,0,0.55) !important;}
+@media(prefers-color-scheme:dark){.break-row td{border-top:2.5px solid rgba(255,255,255,0.55) !important;}}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:flex-end;z-index:200;}
+.sheet{background:var(--bg);border-radius:18px 18px 0 0;padding:14px 14px 36px;width:100%;animation:up 0.2s ease;}
 @keyframes up{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
 .sheet-bar{width:32px;height:4px;background:var(--bd2);border-radius:2px;margin:0 auto 12px;}
 .sheet-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:12px;}
 .sheet label{font-size:12px;color:var(--text2);display:block;margin-bottom:5px;}
-
 .type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px;}
-.type-btn{
-  height:52px;border-radius:10px;font-size:11px;font-weight:600;
-  cursor:pointer;border:2px solid var(--bd);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  background:var(--bg2);color:var(--text2);
-}
+.type-btn{height:52px;border-radius:10px;font-size:11px;font-weight:600;cursor:pointer;border:2px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--bg2);color:var(--text2);}
 .type-btn .icon{font-size:16px;}
-.type-btn.sel-home {background:var(--home-bg);border-color:var(--home-bd);color:var(--home-tx);}
+.type-btn.sel-home{background:var(--home-bg);border-color:var(--home-bd);color:var(--home-tx);}
 .type-btn.sel-visit{background:var(--visit-bg);border-color:var(--visit-bd);color:var(--visit-tx);}
 .type-btn.sel-travel{background:var(--travel-bg);border-color:var(--travel-bd);color:var(--travel-tx);}
-
-#name-row input{
-  width:100%;height:44px;font-size:16px;
-  background:var(--bg2);border:0.5px solid var(--bd2);
-  border-radius:10px;padding:0 12px;color:var(--text);
-  outline:none;margin-bottom:14px;
-}
+#name-row input{width:100%;height:44px;font-size:16px;background:var(--bg2);border:0.5px solid var(--bd2);border-radius:10px;padding:0 12px;color:var(--text);outline:none;margin-bottom:14px;}
 #name-row input:focus{border-color:var(--home-bd);}
-
 .sheet-btns{display:grid;grid-template-columns:1fr 2fr;gap:8px;}
 .btn{height:46px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;}
 .btn:active{opacity:0.7;}
@@ -150,8 +101,8 @@ table{border-collapse:collapse;table-layout:fixed;}
     <div class="sheet-title" id="sheet-ttl"></div>
     <label>種別</label>
     <div class="type-grid">
-      <button class="type-btn" id="btn-home"   onclick="selType('home')">  <span class="icon">🏠</span><span>自宅</span></button>
-      <button class="type-btn" id="btn-visit"  onclick="selType('visit')"> <span class="icon">🚗</span><span>出張</span></button>
+      <button class="type-btn" id="btn-home"   onclick="selType('home')"><span class="icon">🏠</span><span>自宅</span></button>
+      <button class="type-btn" id="btn-visit"  onclick="selType('visit')"><span class="icon">🚗</span><span>出張</span></button>
       <button class="type-btn" id="btn-travel" onclick="selType('travel')"><span class="icon">↔</span><span>移動</span></button>
     </div>
     <div id="name-row">
@@ -168,7 +119,7 @@ table{border-collapse:collapse;table-layout:fixed;}
 <script>
 const DAYS=['月','火','水','木','金','土'];
 const COLORS={
-  home:  {bg:'var(--home-bg)', bd:'var(--home-bd)', tx:'var(--home-tx)'},
+  home:  {bg:'var(--home-bg)',bd:'var(--home-bd)',tx:'var(--home-tx)'},
   visit: {bg:'var(--visit-bg)',bd:'var(--visit-bd)',tx:'var(--visit-tx)'},
   travel:{bg:'var(--travel-bg)',bd:'var(--travel-bd)',tx:'var(--travel-tx)'},
 };
@@ -187,6 +138,7 @@ function build(){
   const sl=slots();
   const t=document.getElementById('tbl');
   t.innerHTML='';
+
   const thead=document.createElement('thead');
   const hr=document.createElement('tr');
   const tc=document.createElement('th');
@@ -201,7 +153,10 @@ function build(){
   sl.forEach(s=>{
     const tr=document.createElement('tr');
     const isHour=s.endsWith(':00');
-    if(isHour)tr.classList.add('hour-row');
+    const isBreak=(s==='13:00'||s==='17:00');
+
+    if(isBreak) tr.classList.add('break-row');
+    else if(isHour) tr.classList.add('hour-row');
 
     const td0=document.createElement('td');
     td0.className='tc-time';
